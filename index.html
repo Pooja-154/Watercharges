@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Charges Calculator</title>
+    <style>
+        body {
+            font-family: Garamond, serif;
+            background-color: #e0f7fa;
+            text-align: center;
+            margin: 50px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.2);
+            text-align: left;
+        }
+        input, button {
+            width: 95%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #90caf9;
+            display: block;
+        }
+        button {
+            background-color: #039be5;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0288d1;
+        }
+        .result-container {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.2);
+            text-align: left;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .heading {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #01579b;
+        }
+        .subheading {
+            text-align: center;
+            font-size: 16px;
+            color: #0277bd;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="heading">Sri Mansion</div>
+        <div class="subheading">Commercial Water Charges Calculator</div>
+        <label for="prevReading">Previous Reading (L):</label>
+        <input type="text" id="prevReading" placeholder="Enter previous reading" inputmode="numeric">
+        
+        <label for="presentReading">Present Reading (L):</label>
+        <input type="text" id="presentReading" placeholder="Enter present reading" inputmode="numeric">
+        
+        <label for="totalConsumption">Total Consumption (L):</label>
+        <input type="text" id="totalConsumption" placeholder="Enter total consumption" inputmode="numeric">
+        
+        <label for="electricityBill">Electricity Bill (Rs.):</label>
+        <input type="text" id="electricityBill" placeholder="Enter electricity bill" inputmode="numeric">
+        
+        <button onclick="calculateCharges()">Calculate</button>
+    </div>
+
+    <div class="result-container">
+        <h3>Domestic Water Charges</h3>
+        <div class='result-item'><span>Water Bill:</span> <span id='domesticWaterBill'></span></div>
+        <div class='result-item'><span>Electricity Bill:</span> <span id='electricityCharges'></span></div>
+        <div class='result-item'><span>Per House:</span> <span id='perHouse'></span></div>
+    </div>
+    
+    <div class="result-container">
+        <h3>Commercial Water Charges</h3>
+        <div class='result-item'><span>Water Bill:</span> <span id='commercialWaterBill'></span></div>
+        <div class='result-item'><span>Motor Bill:</span> <span id='motorBill'></span></div>
+        <div class='result-item'><span>Total:</span> <span id='totalPayable'></span></div>
+    </div>
+
+    <script>
+        function calculateCharges() {
+            let prevReading = parseFloat(document.getElementById("prevReading").value);
+            let presentReading = parseFloat(document.getElementById("presentReading").value);
+            let totalConsumption = parseFloat(document.getElementById("totalConsumption").value);
+            let electricityBill = parseFloat(document.getElementById("electricityBill").value);
+            
+            if (isNaN(prevReading) || isNaN(presentReading) || isNaN(totalConsumption) || isNaN(electricityBill) || prevReading >= presentReading) {
+                alert("Please enter valid readings.");
+                return;
+            }
+            
+            let commercialConsumption = presentReading - prevReading;
+            let domesticConsumption = totalConsumption - commercialConsumption;
+            let motorBill = electricityBill / 6;
+            let electricityCharges = (electricityBill * 5) / 6;
+            let perHouse = electricityCharges / 5;
+            
+            let commercialWaterBill = commercialConsumption * 50 / 1000;
+            let domesticWaterBill = domesticConsumption * 7 / 1000;
+            
+            document.getElementById("commercialWaterBill").innerText = `Rs. ${commercialWaterBill.toFixed(2)}`;
+            document.getElementById("motorBill").innerText = `Rs. ${motorBill.toFixed(2)}`;
+            document.getElementById("totalPayable").innerText = `Rs. ${(commercialWaterBill + motorBill).toFixed(2)}`;
+            
+            document.getElementById("domesticWaterBill").innerText = `Rs. ${domesticWaterBill.toFixed(2)}`;
+            document.getElementById("electricityCharges").innerText = `Rs. ${electricityCharges.toFixed(2)}`;
+            document.getElementById("perHouse").innerText = `Rs. ${perHouse.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
